@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <PackageId>Kododo.MonitorWay.Core</PackageId>
+        <Description>Core model of MonitorWay: log entries, traces and their queries.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/kododo-dev/MonitorWay</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>logo.png</PackageIcon>
+        <Version>2.0.0-preview</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include=".nuget\logo.png" Pack="true" PackagePath="\" />
+        <None Include=".nuget\README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+</Project>

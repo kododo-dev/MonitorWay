@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MonitorWay\MonitorWay.csproj" />
+    </ItemGroup>
+
+    <!--
+      The OTLP messages are generated from opentelemetry-proto v1.11.0 (Protos/, with its Apache 2.0 license) when the
+      project is built; only the messages, no gRPC services. They stay internal: the package's API is MapMonitorWayOtlp.
+    -->
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" />
+        <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
+        <Protobuf Include="Protos\**\*.proto" ProtoRoot="Protos" GrpcServices="None" Access="Internal" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Kododo.MonitorWay.Otlp.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <PackageId>Kododo.MonitorWay.Otlp</PackageId>
+        <Description>OTLP/HTTP receiver of MonitorWay: other services, in any language, send their traces, metrics and logs to the application's MonitorWay, in protobuf or JSON.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/kododo-dev/MonitorWay</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>logo.png</PackageIcon>
+        <Version>2.0.0-preview</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include=".nuget\logo.png" Pack="true" PackagePath="\" />
+        <None Include=".nuget\README.md" Pack="true" PackagePath="" />
+        <None Include="Protos\LICENSE" Pack="true" PackagePath="licenses\opentelemetry-proto\" />
+    </ItemGroup>
+</Project>

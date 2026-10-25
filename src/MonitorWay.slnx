@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/Benchmarks/">
+    <Project Path="MonitorWay.Benchmarks/MonitorWay.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/Demo/">
+    <Project Path="MonitorWay.Demo.Web/MonitorWay.Demo.Web.csproj" />
+  </Folder>
+  <Folder Name="/Integrations/">
+    <Project Path="MonitorWay.Mcp/MonitorWay.Mcp.csproj" />
+    <Project Path="MonitorWay.Otlp/MonitorWay.Otlp.csproj" />
+  </Folder>
+  <Project Path="MonitorWay.Core/MonitorWay.Core.csproj" />
+  <Project Path="MonitorWay.UI/MonitorWay.UI.csproj" />
+  <Project Path="MonitorWay/MonitorWay.csproj" />
+  <Folder Name="/Tests/">
+    <Project Path="MonitorWay.Mcp.Tests/MonitorWay.Mcp.Tests.csproj" />
+    <Project Path="MonitorWay.Otlp.Tests/MonitorWay.Otlp.Tests.csproj" />
+    <Project Path="MonitorWay.Tests/MonitorWay.Tests.csproj" />
+  </Folder>
+</Solution>

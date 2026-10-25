@@ -1,0 +1,8 @@
+**/.git
+**/.idea
+**/bin
+**/obj
+artifacts
+src/MonitorWay.UI/SPA/node_modules
+src/MonitorWay.UI/SPA/dist
+src/MonitorWay.Demo.Web/logs

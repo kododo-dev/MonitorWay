@@ -1,0 +1,101 @@
+name: Deploy Demo Web
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/monitorway-demo-web
+
+jobs:
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/MonitorWay.UI/SPA/package-lock.json
+
+      - name: Lint, test and build SPA
+        working-directory: src/MonitorWay.UI/SPA
+        run: |
+          npm ci
+          npm run lint
+          npm test
+          npm run build
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.x
+            9.x
+            10.x
+
+      - name: Test
+        run: |
+          for project in MonitorWay.Tests MonitorWay.Mcp.Tests MonitorWay.Otlp.Tests; do
+            dotnet test src/$project/$project.csproj --configuration Release
+          done
+
+  push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [test]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    needs: [push]
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        env:
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          envs: GHCR_TOKEN,REPO_OWNER
+          script: |
+            IMAGE="ghcr.io/$REPO_OWNER/monitorway-demo-web:latest"
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$REPO_OWNER" --password-stdin
+            docker pull "$IMAGE"
+            docker stop monitorway-demo-web || true
+            docker rm monitorway-demo-web || true
+            docker run -d \
+              --name monitorway-demo-web \
+              --restart unless-stopped \
+              --network web \
+              -e "ASPNETCORE_PATHBASE=/monitorway/demo" \
+              -e "Demo__HistoryMegabytes=50" \
+              -e "Demo__TextHistoryMegabytes=20" \
+              "$IMAGE"

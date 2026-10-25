@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/MonitorWay.UI/SPA/package-lock.json
+
+      - name: Lint, test and build SPA
+        working-directory: src/MonitorWay.UI/SPA
+        run: |
+          npm ci
+          npm run lint
+          npm test
+          npm run build
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.x
+            9.x
+            10.x
+
+      - name: Restore
+        run: |
+          dotnet restore src/MonitorWay.Tests/MonitorWay.Tests.csproj
+          dotnet restore src/MonitorWay.Mcp.Tests/MonitorWay.Mcp.Tests.csproj
+          dotnet restore src/MonitorWay.Otlp.Tests/MonitorWay.Otlp.Tests.csproj
+
+      - name: Build
+        run: |
+          dotnet build src/MonitorWay.Tests/MonitorWay.Tests.csproj --no-restore --configuration Release
+          dotnet build src/MonitorWay.Mcp.Tests/MonitorWay.Mcp.Tests.csproj --no-restore --configuration Release
+          dotnet build src/MonitorWay.Otlp.Tests/MonitorWay.Otlp.Tests.csproj --no-restore --configuration Release
+
+      - name: Test
+        run: |
+          for project in MonitorWay.Tests MonitorWay.Mcp.Tests MonitorWay.Otlp.Tests; do
+            dotnet test src/$project/$project.csproj \
+              --no-build --configuration Release \
+              --logger "trx;LogFilePrefix=$project"
+          done
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: "**/*.trx"

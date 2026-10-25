@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <EmbeddedResource Include="SPA\dist\**\*" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(UseLocalReiho)' != 'true'">
+        <PackageReference Include="Kododo.Reiho.AspNetCore" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Kododo.Way.Shell" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(UseLocalReiho)' == 'true'">
+        <ProjectReference Include="$(ReihoSource)\Reiho.AspNetCore\Reiho.AspNetCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MonitorWay\MonitorWay.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Kododo.MonitorWay.Tests</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Kododo.MonitorWay.Mcp</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <Target Name="_PreserveFileProvidersEmbeddedPackageReference" AfterTargets="AddPrunePackageReferences">
+        <ItemGroup>
+            <PrunePackageReference Remove="Microsoft.Extensions.FileProviders.Embedded" />
+        </ItemGroup>
+    </Target>
+
+    <PropertyGroup>
+        <PackageId>Kododo.MonitorWay.UI</PackageId>
+        <Description>Web UI of MonitorWay: the telemetry of the application in a panel served by the application itself, in Way.Shell; no separate deployment required.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/kododo-dev/MonitorWay</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>logo.png</PackageIcon>
+        <Version>2.0.0-preview</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include=".nuget\logo.png" Pack="true" PackagePath="\" />
+        <None Include=".nuget\README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+</Project>
