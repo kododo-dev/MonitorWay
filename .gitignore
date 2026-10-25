@@ -22,6 +22,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+# The OTLP messages of logs live in proto/logs and proto/collector/logs.
+!src/MonitorWay.Otlp/Protos/**/[Ll]ogs/
 
 # .NET Core
 project.lock.json
