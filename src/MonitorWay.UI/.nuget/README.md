@@ -5,7 +5,7 @@ Web UI of [Kododo.MonitorWay](https://www.nuget.org/packages/Kododo.MonitorWay):
 ## Install
 
 ```bash
-dotnet add package Kododo.MonitorWay.UI --prerelease
+dotnet add package Kododo.MonitorWay.UI
 dotnet add package OpenTelemetry.Extensions.Hosting
 dotnet add package OpenTelemetry.Instrumentation.AspNetCore
 ```
