@@ -5,7 +5,7 @@
 
 The telemetry of your ASP.NET Core application in a panel served by the application itself. MonitorWay is an exporter of the OpenTelemetry SDK: it keeps what the application reports in memory and shows it in a web UI, with no collector, database or monitoring server to run. It works next to any other exporter, e.g. OTLP to Grafana or Jaeger.
 
-This is a preview. Logs, traces, errors and metrics are there, in the UI and as tools for AI agents, from the application itself and from other services over OTLP (see [docs/architecture.md](docs/architecture.md)).
+Logs, traces, errors and metrics are there, in the UI and as tools for AI agents, from the application itself and from other services over OTLP (see [docs/architecture.md](docs/architecture.md)).
 
 A live demo is available at [kododo.dev/monitorway/demo](https://kododo.dev/monitorway/demo).
 
@@ -26,18 +26,18 @@ A live demo is available at [kododo.dev/monitorway/demo](https://kododo.dev/moni
 
 | Package | NuGet | Description |
 |---|---|---|
-| `Kododo.MonitorWay` | [![NuGet](https://img.shields.io/nuget/vpre/Kododo.MonitorWay)](https://www.nuget.org/packages/Kododo.MonitorWay) | Registration, OpenTelemetry exporters, memory stores of logs, traces, errors and metrics, log files, queries |
-| `Kododo.MonitorWay.UI` | [![NuGet](https://img.shields.io/nuget/vpre/Kododo.MonitorWay.UI)](https://www.nuget.org/packages/Kododo.MonitorWay.UI) | Web UI in Way.Shell |
-| `Kododo.MonitorWay.Mcp` | [![NuGet](https://img.shields.io/nuget/vpre/Kododo.MonitorWay.Mcp)](https://www.nuget.org/packages/Kododo.MonitorWay.Mcp) | Read-only tools for AI agents |
-| `Kododo.MonitorWay.Otlp` | [![NuGet](https://img.shields.io/nuget/vpre/Kododo.MonitorWay.Otlp)](https://www.nuget.org/packages/Kododo.MonitorWay.Otlp) | OTLP/HTTP receiver for other services |
-| `Kododo.MonitorWay.Core` | [![NuGet](https://img.shields.io/nuget/vpre/Kododo.MonitorWay.Core)](https://www.nuget.org/packages/Kododo.MonitorWay.Core) | Model (`LogEntry`, `TraceEntry`, `TraceSpan`, `ErrorGroup`, `MetricInstrument` and the queries) |
+| `Kododo.MonitorWay` | [![NuGet](https://img.shields.io/nuget/v/Kododo.MonitorWay)](https://www.nuget.org/packages/Kododo.MonitorWay) | Registration, OpenTelemetry exporters, memory stores of logs, traces, errors and metrics, log files, queries |
+| `Kododo.MonitorWay.UI` | [![NuGet](https://img.shields.io/nuget/v/Kododo.MonitorWay.UI)](https://www.nuget.org/packages/Kododo.MonitorWay.UI) | Web UI in Way.Shell |
+| `Kododo.MonitorWay.Mcp` | [![NuGet](https://img.shields.io/nuget/v/Kododo.MonitorWay.Mcp)](https://www.nuget.org/packages/Kododo.MonitorWay.Mcp) | Read-only tools for AI agents |
+| `Kododo.MonitorWay.Otlp` | [![NuGet](https://img.shields.io/nuget/v/Kododo.MonitorWay.Otlp)](https://www.nuget.org/packages/Kododo.MonitorWay.Otlp) | OTLP/HTTP receiver for other services |
+| `Kododo.MonitorWay.Core` | [![NuGet](https://img.shields.io/nuget/v/Kododo.MonitorWay.Core)](https://www.nuget.org/packages/Kododo.MonitorWay.Core) | Model (`LogEntry`, `TraceEntry`, `TraceSpan`, `ErrorGroup`, `MetricInstrument` and the queries) |
 
-Targets `net8.0`, `net9.0` and `net10.0`.
+Targets `net10.0` and `net11.0`.
 
 ## Quick start
 
 ```bash
-dotnet add package Kododo.MonitorWay.UI --prerelease
+dotnet add package Kododo.MonitorWay.UI
 dotnet add package OpenTelemetry.Extensions.Hosting
 ```
 

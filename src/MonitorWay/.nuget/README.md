@@ -5,7 +5,7 @@ The telemetry of your ASP.NET Core application in a panel served by the applicat
 ## Install
 
 ```bash
-dotnet add package Kododo.MonitorWay.UI --prerelease
+dotnet add package Kododo.MonitorWay.UI
 dotnet add package OpenTelemetry.Extensions.Hosting
 dotnet add package OpenTelemetry.Instrumentation.AspNetCore
 ```
