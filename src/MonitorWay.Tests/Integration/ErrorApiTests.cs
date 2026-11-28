@@ -32,9 +32,22 @@ public class ErrorApiTests
 
         await client.GetAsync("/pay");
         await client.GetAsync("/pay");
-        app.Services.GetRequiredService<MemoryTraceStore>().Tick();
 
-        var page = await PostAsync<ErrorsPageDto>(app, "GetErrors", new { query = new { text = "type:Timeout" } });
+        // The test server answers before the request's span ends, and on .NET 11 the span is named after its route only
+        // then, so the traces are read once both requests have been joined to their spans.
+        var store = app.Services.GetRequiredService<MemoryTraceStore>();
+        ErrorsPageDto page;
+        var deadline = DateTime.UtcNow.AddSeconds(5);
+        do
+        {
+            store.Tick();
+            page = await PostAsync<ErrorsPageDto>(app, "GetErrors", new { query = new { text = "type:Timeout" } });
+            if (page.Errors is [{ Endpoints: ["GET /pay"] }])
+                break;
+            await Task.Delay(20);
+        }
+        while (DateTime.UtcNow < deadline);
+
         var row = Assert.Single(page.Errors);
         Assert.Equal("System.TimeoutException", row.Type);
         Assert.Equal(2, row.Count);
